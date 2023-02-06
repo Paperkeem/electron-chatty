@@ -1,26 +1,13 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Button, Form, Input } from "antd";
+import { signInEmail } from "../src/apis/firebase";
 import { useRouter } from "next/router";
-import { logInEmail, signInEmail } from "../src/apis/firebase";
+import { User } from "./home";
 
-export type User = {
-  email: string;
-  name?: string;
-  password: string;
-};
-
-export default function Home() {
+export default function signIn() {
   const [user, setUser] = useState<User>();
   const router = useRouter();
-
-  const onFinish = (values: any) => {
-    console.log("Success:", values);
-  };
-
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
-  };
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -28,23 +15,21 @@ export default function Home() {
   };
 
   const handleSubmit = () => {
-    logInEmail(user.email, user.password)
+    signInEmail(user.email, user.password)
       .then((res) => {
         if (res.operationType == "signIn") {
           router.push("/chat");
-          setUser({ email: "", password: "" });
-        } else console.log("로그인에 실패하였습니다.");
+          setUser({ email: "", name: "", password: "" });
+        } else console.log("회원가입에 실패하였습니다.");
       })
-      .catch((error) => {
-        console.error(error);
-      });
+      .catch((error) => console.error(error));
   };
 
   return (
     <>
       <div style={{ width: "100vw" }}>
-        <h1 style={{ textAlign: "center" }}>Hello,</h1>
-        <h1 style={{ textAlign: "center" }}>Chatty!</h1>
+        <h1 style={{ textAlign: "center" }}>Sign In</h1>
+        <h1 style={{ textAlign: "center" }}>Here!</h1>
 
         <Form
           name="basic"
@@ -52,19 +37,29 @@ export default function Home() {
           wrapperCol={{ span: 16 }}
           style={{ maxWidth: 600, margin: "0 auto" }}
           initialValues={{ remember: true }}
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
           autoComplete="off"
         >
           <Form.Item
             label="아이디"
-            name="username"
+            name="useremail"
             rules={[{ required: true, message: "Please input your username!" }]}
           >
             <Input
               name="email"
               onChange={handleChange}
               value={user?.email || ""}
+            />
+          </Form.Item>
+
+          <Form.Item
+            label="별명"
+            name="username"
+            rules={[{ required: true, message: "Please input your name!" }]}
+          >
+            <Input
+              name="name"
+              onChange={handleChange}
+              value={user?.name || ""}
             />
           </Form.Item>
 
@@ -87,12 +82,12 @@ export default function Home() {
               onClick={handleSubmit}
               style={{ width: "100%" }}
             >
-              Log in
+              Sign in
             </Button>
 
-            <Link href="/signIn">
+            <Link href="/home">
               <span style={{ color: "gray", cursor: "pointer" }}>
-                /아이디가 없다면? 회원 가입 페이지로/
+                /아이디가 있다면? 로그인 페이지로/
               </span>
             </Link>
           </Form.Item>

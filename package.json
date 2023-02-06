@@ -11,12 +11,15 @@
     "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
+    "antd": "^5.1.7",
     "electron-serve": "^1.1.0",
-    "electron-store": "^8.1.0"
+    "electron-store": "^8.1.0",
+    "firebase": "^9.17.1"
   },
   "devDependencies": {
     "@types/node": "^18.11.18",
     "@types/react": "^18.0.26",
+    "@types/styled-components": "^5.1.26",
     "electron": "^21.3.3",
     "electron-builder": "^23.6.0",
     "next": "^12.3.4",
