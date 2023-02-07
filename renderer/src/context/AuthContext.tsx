@@ -2,23 +2,24 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { onAuth } from "../apis/firebase";
 
 type TAuth = {
-  username: string;
-  setUsername: (newUsername: string) => void;
+  // username?: string;
+  // setUsername?: (newUsername: string) => void;
+  user: any;
 };
+
 const AuthContext = createContext<TAuth | null>(null);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [username, setUsername] = useState<string>("");
+  const [user, setUser] = useState<any>({});
+  // const [username, setUsername] = useState<string>("");
 
   useEffect(() => {
-    onAuth();
+    onAuth(setUser);
     console.log("auth 함수 부르는 중");
   }, []);
 
   return (
-    <AuthContext.Provider value={{ username, setUsername }}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
   );
 };
 

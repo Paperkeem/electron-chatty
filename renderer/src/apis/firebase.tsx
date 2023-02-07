@@ -39,15 +39,25 @@ export function Logout() {
   signOut(auth).catch(console.error);
 }
 
-export function onAuth() {
+export function onAuth(callback) {
   onAuthStateChanged(auth, async (user) => {
     // 유저 이름 추가하기
-    // const updatedUser = user ? await adminUser(user) : null;
-    // callback(updatedUser);
-    const info = { ...user };
-    console.log(info);
+    const updatedUser = user ? await getUserName(user) : null;
+    callback(updatedUser);
   });
 }
+
+export const getUserName = async (user) => {
+  const { uid } = user;
+  return get(ref(database, `users/${uid}`)).then((snapshot) => {
+    if (snapshot.exists()) {
+      const name = snapshot.val().name;
+      return { ...user, name };
+    }
+    return { ...user, name: "익명" };
+  });
+};
+
 export const writeUserData = (userId: string, email: string, name: string) => {
   set(ref(database, "users/" + userId), {
     userId,
@@ -59,7 +69,6 @@ export const writeUserData = (userId: string, email: string, name: string) => {
 export async function getUserList() {
   return get(ref(database, `users`)).then((snapshot) => {
     const items = snapshot.val() || {};
-    console.log(items);
     return Object.values(items);
   });
 }
