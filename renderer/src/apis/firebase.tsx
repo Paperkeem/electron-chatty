@@ -112,11 +112,21 @@ export const makeGroupChat = async (idx) => {
   return set(ref(database, `group/그룹채팅방${idx}`), Date.now());
 };
 
-export const setChatMsgInGroup = async (idx, uid, name, massage) => {
+export const setChatMsgInGroup = async (idx, uid, name, message) => {
   const stamp = Date.now();
-  return set(ref(database, `group/group${idx}/${stamp}`), {
+  return set(ref(database, `group/그룹채팅방${idx}/${stamp}`), {
     uid,
     name,
-    massage,
+    message,
+  });
+};
+
+export const getGroupMsg = async (idx) => {
+  return get(ref(database, `group/그룹채팅방${idx}`)).then((snapshot) => {
+    if (snapshot.exists()) {
+      const items = snapshot.val();
+      return Object.values(items);
+    }
+    return [];
   });
 };

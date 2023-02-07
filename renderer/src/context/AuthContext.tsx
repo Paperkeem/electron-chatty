@@ -4,6 +4,7 @@ import { onAuth } from "../apis/firebase";
 type TAuth = {
   user: any;
   uid: string;
+  name: string;
 };
 
 const AuthContext = createContext<TAuth | null>(null);
@@ -17,7 +18,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, uid: user?.uid }}>
+    <AuthContext.Provider value={{ user, uid: user?.uid, name: user?.name }}>
       {children}
     </AuthContext.Provider>
   );
