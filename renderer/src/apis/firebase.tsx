@@ -1,3 +1,4 @@
+import { message } from "antd";
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
@@ -101,12 +102,21 @@ export const getGroupList = async () => {
   return get(ref(database, `group`)).then((snapshot) => {
     if (snapshot.exists()) {
       const items = snapshot.val();
-      return Object.values(items);
+      return Object.keys(items);
     }
     return [];
   });
 };
 
-export const makeGroupChat = async () => {
-  return;
+export const makeGroupChat = async (idx) => {
+  return set(ref(database, `group/그룹채팅방${idx}`), Date.now());
+};
+
+export const setChatMsgInGroup = async (idx, uid, name, massage) => {
+  const stamp = Date.now();
+  return set(ref(database, `group/group${idx}/${stamp}`), {
+    uid,
+    name,
+    massage,
+  });
 };
