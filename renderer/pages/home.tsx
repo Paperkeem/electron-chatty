@@ -29,11 +29,9 @@ export default function Home() {
 
   const handleSubmit = () => {
     logInEmail(user.email, user.password)
-      .then((res) => {
-        if (res.operationType == "signIn") {
-          router.push("/chat");
-          setUser({ email: "", password: "" });
-        } else console.log("로그인에 실패하였습니다.");
+      .then(() => {
+        router.push("/chat");
+        setUser({ email: "", password: "" });
       })
       .catch((error) => {
         console.error(error);

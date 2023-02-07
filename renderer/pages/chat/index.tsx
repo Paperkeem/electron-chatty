@@ -10,18 +10,15 @@ export default function Chat() {
     token: { colorBgContainer },
   } = theme.useToken();
 
-  useEffect(() => {
-    console.log("채팅방 입성");
-    onAuth();
-  }, []);
-
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider style={{ margin: 0 }}>
         <Link href="/home">
           <p className="page">Login Page</p>
         </Link>
-        <p className="page">User List</p>
+        <Link href="/chat/list">
+          <p className="page">User List</p>
+        </Link>
         <p className="page">1:1 Chat</p>
         <p className="page">Group Chat</p>
       </Sider>

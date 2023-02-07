@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Button, Form, Input } from "antd";
-import { signInEmail } from "../src/apis/firebase";
+import { signInEmail, writeUserData } from "../src/apis/firebase";
 import { useRouter } from "next/router";
 import { User } from "./home";
 
@@ -17,10 +17,12 @@ export default function signIn() {
   const handleSubmit = () => {
     signInEmail(user.email, user.password)
       .then((res) => {
-        if (res.operationType == "signIn") {
-          router.push("/chat");
-          setUser({ email: "", name: "", password: "" });
-        } else console.log("회원가입에 실패하였습니다.");
+        const {
+          user: { uid, email },
+        } = res;
+        writeUserData(uid, email, user.name);
+        router.push("/chat");
+        setUser({ email: "", name: "", password: "" });
       })
       .catch((error) => console.error(error));
   };

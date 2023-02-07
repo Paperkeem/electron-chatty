@@ -1,4 +1,3 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
@@ -7,21 +6,18 @@ import {
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
-import { getDatabase, ref, set } from "firebase/database";
+import { getDatabase, ref, set, get } from "firebase/database";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_API,
   authDomain: process.env.NEXT_PUBLIC_FIRE_DOMAIN,
   databaseURL: process.env.NEXT_PUBLIC_FIRE_DATABASE,
   projectId: process.env.NEXT_PUBLIC_FIRE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIRE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIRE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIRE_APP_ID,
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-// const database = getDatabase();
+const database = getDatabase(app);
 
 export const signInEmail = (email: string, password: string) => {
   return createUserWithEmailAndPassword(auth, email, password).catch(
@@ -48,14 +44,22 @@ export function onAuth() {
     // 유저 이름 추가하기
     // const updatedUser = user ? await adminUser(user) : null;
     // callback(updatedUser);
-    const info = { ...user, name: "종이" };
+    const info = { ...user };
     console.log(info);
   });
 }
-// export const writeUserData = (userId, name, email) => {
-//   set(ref(database, "users/" + userId), {
-//     userId,
-//     name,
-//     email,
-//   });
-// };
+export const writeUserData = (userId: string, email: string, name: string) => {
+  set(ref(database, "users/" + userId), {
+    userId,
+    email,
+    name,
+  });
+};
+
+export async function getUserList() {
+  return get(ref(database, `users`)).then((snapshot) => {
+    const items = snapshot.val() || {};
+    console.log(items);
+    return Object.values(items);
+  });
+}
