@@ -30,7 +30,12 @@ export default function SideBar({ children }: PropsWithChildren) {
           <p className="page">User List</p>
         </Link>
         <p className="page">1:1 Chat</p>
-        <p className="page">Group Chat</p>
+        <Link href="/group">
+          <p className="page">Group Chat</p>
+        </Link>
+        <Link href="/info">
+          <p className="page">Your Infomation</p>
+        </Link>
       </Sider>
 
       <Layout className="site-layout">

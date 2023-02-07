@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Button, Form, Input } from "antd";
 import { useRouter } from "next/router";
-import { logInEmail, signInEmail } from "../src/apis/firebase";
+import { logInEmail } from "../src/apis/firebase";
 
 export type User = {
   email: string;

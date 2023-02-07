@@ -14,7 +14,8 @@
     "antd": "^5.1.7",
     "electron-serve": "^1.1.0",
     "electron-store": "^8.1.0",
-    "firebase": "^9.17.1"
+    "firebase": "^9.17.1",
+    "react-uuid": "^2.0.0"
   },
   "devDependencies": {
     "@types/node": "^18.11.18",

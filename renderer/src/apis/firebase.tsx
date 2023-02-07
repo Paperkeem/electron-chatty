@@ -19,7 +19,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const database = getDatabase(app);
 
-export const signInEmail = (email: string, password: string) => {
+export const signInEmail = async (email: string, password: string) => {
   return createUserWithEmailAndPassword(auth, email, password).catch(
     (error) => {
       const errorMessage = error.message;
@@ -28,24 +28,23 @@ export const signInEmail = (email: string, password: string) => {
   );
 };
 
-export const logInEmail = (email: string, password: string) => {
+export const logInEmail = async (email: string, password: string) => {
   return signInWithEmailAndPassword(auth, email, password).catch((error) => {
     const errorMessage = error.message;
     throw new Error("로그인 에러" + errorMessage);
   });
 };
 
-export function Logout() {
+export const Logout = () => {
   signOut(auth).catch(console.error);
-}
+};
 
-export function onAuth(callback) {
+export const onAuth = (callback) => {
   onAuthStateChanged(auth, async (user) => {
-    // 유저 이름 추가하기
-    const updatedUser = user ? await getUserName(user) : null;
+    const updatedUser = user ? await getUserName(user) : user;
     callback(updatedUser);
   });
-}
+};
 
 export const getUserName = async (user) => {
   const { uid } = user;
@@ -58,17 +57,48 @@ export const getUserName = async (user) => {
   });
 };
 
-export const writeUserData = (userId: string, email: string, name: string) => {
-  set(ref(database, "users/" + userId), {
+export const writeUserData = async (
+  userId: string,
+  email: string,
+  name: string
+) => {
+  return set(ref(database, "users/" + userId), {
     userId,
     email,
     name,
   });
 };
 
-export async function getUserList() {
+export const getUserList = async () => {
   return get(ref(database, `users`)).then((snapshot) => {
     const items = snapshot.val() || {};
     return Object.values(items);
   });
-}
+};
+
+// FIXME: uuid 말고 다른 방법 생각하기
+export const makeChatRoom = async (
+  id: string,
+  userId: string,
+  otherId: string
+) => {
+  return set(ref(database, "chatRoom/" + userId), {
+    chatRoom: id,
+    me: userId,
+    other: otherId,
+  });
+};
+
+export const getGroupList = async () => {
+  return get(ref(database, `group`)).then((snapshot) => {
+    if (snapshot.exists()) {
+      const items = snapshot.val();
+      return Object.values(items);
+    }
+    return [];
+  });
+};
+
+export const makeGroupChat = async () => {
+  return;
+};

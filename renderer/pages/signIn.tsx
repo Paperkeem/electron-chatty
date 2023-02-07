@@ -21,7 +21,7 @@ export default function signIn() {
           user: { uid, email },
         } = res;
         writeUserData(uid, email, user.name);
-        router.push("/chat");
+        router.push("/home");
         setUser({ email: "", name: "", password: "" });
       })
       .catch((error) => console.error(error));
