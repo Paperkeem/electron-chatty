@@ -5,7 +5,7 @@ import { getGroupList, onAuth } from "../../src/apis/firebase";
 
 export default function groupchat() {
   const handleMakeGroup = () => {
-    getGroupList().then(console.log);
+    // getGroupList().then(console.log);
     location.reload();
   };
 

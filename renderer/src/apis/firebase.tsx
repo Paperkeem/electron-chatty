@@ -7,6 +7,7 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 import { getDatabase, ref, set, get } from "firebase/database";
+import { isReadable } from "stream";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_API,
@@ -37,11 +38,18 @@ export const logInEmail = async (email: string, password: string) => {
 
 export const Logout = () => {
   signOut(auth).catch(console.error);
+  localStorage.removeItem("userData");
 };
 
 export const onAuth = (callback) => {
   onAuthStateChanged(auth, async (user) => {
-    const updatedUser = user ? await getUserName(user) : user;
+    let updatedUser;
+    if (user != null) {
+      updatedUser = user ? await getUserName(user) : user;
+      localStorage.setItem("userData", JSON.stringify(updatedUser));
+    } else if (user == null) {
+      updatedUser = JSON.parse(localStorage.getItem("userData")) || {};
+    }
     callback(updatedUser);
   });
 };
