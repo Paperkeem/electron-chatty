@@ -46,6 +46,13 @@ NEXT_PUBLIC_FIRE_PROJECT_ID=
 npm run dev
 ```
 
+etc. chatty APP에서 이용할 수 있는 테스트 계정 정보입니다.
+```bash
+email=admin@gmail.com / password=1234567
+email=test@gmail.com / password=1234567
+email=ahha@gmail.com / password=1234567
+```
+
 <br>
 
 ## 기술스택
@@ -57,10 +64,17 @@ npm run dev
 
 ## 구현사항
 
+<div align="center">
+   <img width="500px" src="https://user-images.githubusercontent.com/107424974/217604421-2cdf8c7b-5e12-4f46-877b-951068988226.gif"/>
+   <br />
+   <img width="500px" src="https://user-images.githubusercontent.com/107424974/217604436-a235bf68-b29f-4b46-a974-f1a8e75d01aa.gif"/>
+   <br />
+   <img width="500px" src="https://user-images.githubusercontent.com/107424974/217604655-c7f347ab-51b4-4bd0-bf91-ac91365287b9.gif"/>
+</div>
 
 ## 회고
 
- - 리팩토링 하고 싶은 목록입니다.
+##### 리팩토링 하고 싶은 목록입니다.
 - [ ] firebase 호출 함수 react-query로 refactoring
   <br />
 - [ ] 중복 사용 함수를 custom hook으로 관리
