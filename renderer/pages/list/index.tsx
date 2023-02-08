@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 
 export default function list() {
   const [userList, setUserList] = useState([]);
-  const { user, uid, name } = useAuthContext();
+  const { uid, name, email } = useAuthContext();
   const router = useRouter();
 
   useEffect(() => {
@@ -33,7 +33,7 @@ export default function list() {
       <p>이미 채팅방이 존재하는 경우 생성된 채팅방으로 이동합니다.</p>
       <hr />
       {userList?.map((user, index) => {
-        if (user.name === name) return;
+        if (user.name === name || user.email === email) return;
         else {
           return (
             <section className="userBox" key={index}>

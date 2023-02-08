@@ -15,10 +15,10 @@ export default function signIn() {
   };
 
   const handleSubmit = () => {
-    signInEmail(user.email, user.password)
+    signInEmail(user.email, user.password, user.name)
       .then((res) => {
         const {
-          user: { uid, email },
+          user: { uid, email, displayName },
         } = res;
         writeUserData(uid, email, user.name);
         router.push("/list");

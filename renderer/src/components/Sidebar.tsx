@@ -13,7 +13,7 @@ export default function SideBar({ children }: PropsWithChildren) {
   } = theme.useToken();
 
   const router = useRouter();
-  const { user } = useAuthContext();
+  const { name } = useAuthContext();
 
   const handleLogout = () => {
     router.push("/home");
@@ -43,7 +43,7 @@ export default function SideBar({ children }: PropsWithChildren) {
       <Layout className="site-layout">
         <Content style={{ margin: "0 16px" }}>
           <Breadcrumb style={{ margin: "16px 0" }}>
-            <Breadcrumb.Item>{user?.name}님 안녕하세요!</Breadcrumb.Item>
+            <Breadcrumb.Item>{name}님 안녕하세요!</Breadcrumb.Item>
           </Breadcrumb>
           <div
             style={{

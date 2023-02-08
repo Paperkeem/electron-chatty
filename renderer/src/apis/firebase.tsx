@@ -1,4 +1,3 @@
-import { message } from "antd";
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
@@ -6,9 +5,9 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  updateProfile,
 } from "firebase/auth";
 import { getDatabase, ref, set, get } from "firebase/database";
-import { isReadable } from "stream";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_API,
@@ -22,13 +21,22 @@ const auth = getAuth(app);
 const database = getDatabase(app);
 
 // auth
-export const signInEmail = async (email: string, password: string) => {
-  return createUserWithEmailAndPassword(auth, email, password).catch(
-    (error) => {
+export const signInEmail = async (
+  email: string,
+  password: string,
+  name: string
+) => {
+  return createUserWithEmailAndPassword(auth, email, password)
+    .then((res) => {
+      updateProfile(auth.currentUser, {
+        displayName: name,
+      });
+      return res;
+    })
+    .catch((error) => {
       const errorMessage = error.message;
       throw new Error("회원가입 에러" + errorMessage);
-    }
-  );
+    });
 };
 
 export const logInEmail = async (email: string, password: string) => {
@@ -47,23 +55,12 @@ export const onAuth = (callback) => {
   onAuthStateChanged(auth, async (user) => {
     let updatedUser;
     if (user != null) {
-      updatedUser = user ? await getUserName(user) : user;
+      updatedUser = user;
       localStorage.setItem("userData", JSON.stringify(updatedUser));
     } else if (user == null) {
       updatedUser = JSON.parse(localStorage.getItem("userData")) || {};
     }
     callback(updatedUser);
-  });
-};
-
-export const getUserName = async (user) => {
-  const { uid } = user;
-  return get(ref(database, `users/${uid}`)).then((snapshot) => {
-    if (snapshot.exists()) {
-      const name = snapshot.val().name;
-      return { ...user, name };
-    }
-    return { ...user, name: "익명" };
   });
 };
 

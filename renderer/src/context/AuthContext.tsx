@@ -2,9 +2,10 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { onAuth } from "../apis/firebase";
 
 type TAuth = {
-  user: any;
+  user?: any;
   uid: string;
   name: string;
+  email: string;
 };
 
 const AuthContext = createContext<TAuth | null>(null);
@@ -14,10 +15,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     onAuth(setUser);
+    console.log("auth 함수 콜링 중");
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, uid: user?.uid, name: user?.name }}>
+    <AuthContext.Provider
+      value={{ uid: user?.uid, name: user?.displayName, email: user?.email }}
+    >
       {children}
     </AuthContext.Provider>
   );
