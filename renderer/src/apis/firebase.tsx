@@ -122,6 +122,16 @@ export const getGroupMsg = async (idx) => {
 };
 
 //1:1 chat
+export const getMyChatList = async (myId) => {
+  return get(ref(database, `chatRoom/${myId}`)).then((snapshot) => {
+    if (snapshot.exists()) {
+      const items = snapshot.val();
+      return Object.keys(items);
+    }
+    return [];
+  });
+};
+
 export const makeChatRoom = async (myId, yourId) => {
   const stamp = Date.now();
 
@@ -130,6 +140,7 @@ export const makeChatRoom = async (myId, yourId) => {
       return snapshot.val();
     } else {
       set(ref(database, `chatRoom/${myId}/${yourId}`), stamp);
+      set(ref(database, `chatRoom/${yourId}/${myId}`), stamp);
       return stamp;
     }
   });

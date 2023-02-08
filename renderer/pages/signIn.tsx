@@ -50,6 +50,7 @@ export default function signIn() {
               name="email"
               onChange={handleChange}
               value={user?.email || ""}
+              placeholder="아이디는 {abcd@abcd.abc}의 규칙으로 적어주세요"
             />
           </Form.Item>
 
@@ -62,6 +63,7 @@ export default function signIn() {
               name="name"
               onChange={handleChange}
               value={user?.name || ""}
+              placeholder="별명을 적어주세요"
             />
           </Form.Item>
 
@@ -74,6 +76,7 @@ export default function signIn() {
               name="password"
               onChange={handleChange}
               value={user?.password || ""}
+              placeholder="비밀번호는 7자리 이상으로 적어주세요"
             />
           </Form.Item>
 
