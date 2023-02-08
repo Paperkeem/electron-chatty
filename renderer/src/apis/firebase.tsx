@@ -86,17 +86,17 @@ export const getUserList = async () => {
 };
 
 // FIXME: uuid 말고 다른 방법 생각하기
-export const makeChatRoom = async (
-  id: string,
-  userId: string,
-  otherId: string
-) => {
-  return set(ref(database, "chatRoom/" + userId), {
-    chatRoom: id,
-    me: userId,
-    other: otherId,
-  });
-};
+// export const makeChatRoom = async (
+//   id: string,
+//   userId: string,
+//   otherId: string
+// ) => {
+//   return set(ref(database, "chatRoom/" + userId), {
+//     chatRoom: id,
+//     me: userId,
+//     other: otherId,
+//   });
+// };
 
 export const getGroupList = async () => {
   return get(ref(database, `group`)).then((snapshot) => {

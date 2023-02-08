@@ -1,14 +1,11 @@
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SideBar from "../../src/components/Sidebar";
 import { Input, Button } from "antd";
 import { SendOutlined, UserOutlined } from "@ant-design/icons";
 import { getGroupMsg, setChatMsgInGroup } from "../../src/apis/firebase";
 import { useAuthContext } from "../../src/context/AuthContext";
-
-type TGropChat = {
-  [key: string]: string;
-};
+import ChatMsg from "../../src/components/chat/ChatMsg";
 
 export default function GroupChat() {
   const {
@@ -18,6 +15,14 @@ export default function GroupChat() {
 
   const [groupChat, setGroupChat] = useState<any>();
   const [message, setMessage] = useState("");
+
+  const chatWindowRef = useRef(null);
+
+  useEffect(() => {
+    chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
+    console.log(chatWindowRef.current.scrollTop);
+    console.log(chatWindowRef.current.scrollHeight);
+  }, [groupChat]);
 
   useEffect(() => {
     getGroupMsg(idx).then(setGroupChat);
@@ -30,7 +35,7 @@ export default function GroupChat() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (message.trim() === "") {
+    if (!message || message.trim() === "") {
       return;
     }
     setMessage(null);
@@ -42,42 +47,92 @@ export default function GroupChat() {
     <SideBar>
       <p>그룹 채팅방 {idx}</p>
       <hr />
-      {groupChat?.map((chat) => (
-        <>
-          <p>{chat.message}</p>
-          <p>{chat.name}</p>
-        </>
-      ))}
+
+      <section className="chatForm" ref={chatWindowRef}>
+        <div className="chatWindow">
+          {groupChat?.length === 0 && <p>지금 바로 채팅을 시작해보세요!</p>}
+          {groupChat?.map((chat, index) => {
+            if (chat.name == name) {
+              return (
+                <div key={index} className="mychat">
+                  <ChatMsg chat={chat} />
+                </div>
+              );
+            } else {
+              return (
+                <div key={index} className="yourchat">
+                  <ChatMsg chat={chat} />
+                </div>
+              );
+            }
+          })}
+        </div>
+      </section>
 
       <form onClick={handleSubmit}>
-        <input
-          type="text"
-          onChange={handleChange}
-          name="message"
-          value={message || ""}
-        />
-        <button type="submit">
-          <SendOutlined />
-        </button>
-        {/* <Input
-          onChange={handleChange}
-          name="message"
-          value={message || ""}
-          style={{ width: "calc(100% - 50px)" }}
-          placeholder="보내실 메세지를 입력해주세요."
-        />
-        <Button
-          type="primary"
-          disabled
-          style={{ width: "50px", backgroundColor: "gray" }}
-        >
-          <SendOutlined />
-        </Button> */}
+        <div className="formWraper">
+          <input
+            className="input"
+            type="text"
+            onChange={handleChange}
+            name="message"
+            value={message || ""}
+          />
+          <button className="sendbtn" type="submit">
+            <SendOutlined />
+          </button>
+        </div>
       </form>
 
       <style>{`
-      .enter{
-        font-size:2rem;
+      .chatForm{
+        border: 0px solid gray;
+        min-height: 70vh;
+        max-height: 70vh;
+        overflow-y: auto;
+      }
+      .mychat{
+        text-align: right;
+        margin-bottom: 10px;
+      }
+      .yourchat {
+        margin-bottom: 10px;
+      }
+      .mychat p, 
+      .yourchat p {
+        font-size: 0.7rem;
+        padding: 3px;
+      }
+      .mychat span{
+        background-color: #192a56;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 3px;
+      }
+      .yourchat span{
+        background-color: #718093;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 3px;
+      }
+
+      .formWraper{
+        display: flex;
+      }
+      .input {
+        padding: 10px 20px;
+        border: 1px solid lightgray;
+        border-radius: 20px;
+        width: 95%;
+        margin-right: 5px;
+      }
+
+      .sendbtn {
+        padding: 10px 20px;
+        border: 1px solid lightgray;
+        border-radius: 20px;
+        background-color: #192a56;
+        color: white;
       }
       `}</style>
     </SideBar>

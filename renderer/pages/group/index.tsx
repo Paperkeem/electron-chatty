@@ -40,6 +40,7 @@ export default function groupchat() {
           .group {
             padding-top: 25px;
             padding-bottom: 25px;
+            cursor: pointer;
             border-bottom: 1px solid rgba(0, 0, 0, 0.05);
           }
           .group:hover {

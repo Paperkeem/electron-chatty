@@ -21,7 +21,7 @@ export default function SideBar({ children }: PropsWithChildren) {
   };
 
   return (
-    <Layout style={{ minHeight: "100vh" }}>
+    <Layout style={{ minHeight: "97vh" }}>
       <Sider style={{ margin: 0 }}>
         <Button onClick={handleLogout} style={{ margin: 10 }}>
           Logout
@@ -29,7 +29,7 @@ export default function SideBar({ children }: PropsWithChildren) {
         <Link href="/chat">
           <p className="page">User List</p>
         </Link>
-        <p className="page">1:1 Chat</p>
+        <p className="page">My 1:1 Chat List</p>
         <Link href="/group">
           <p className="page">Group Chat</p>
         </Link>
