@@ -26,10 +26,12 @@ export default function SideBar({ children }: PropsWithChildren) {
         <Button onClick={handleLogout} style={{ margin: 10 }}>
           Logout
         </Button>
-        <Link href="/chat">
+        <Link href="/list">
           <p className="page">User List</p>
         </Link>
-        <p className="page">My 1:1 Chat List</p>
+        <Link href="/chat">
+          <p className="page">My 1:1 Chat List</p>
+        </Link>
         <Link href="/group">
           <p className="page">Group Chat</p>
         </Link>

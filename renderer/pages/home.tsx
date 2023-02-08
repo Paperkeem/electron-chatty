@@ -30,7 +30,7 @@ export default function Home() {
   const handleSubmit = () => {
     logInEmail(user.email, user.password)
       .then(() => {
-        router.push("/chat");
+        router.push("/list");
         setUser({ email: "", password: "" });
       })
       .catch((error) => {

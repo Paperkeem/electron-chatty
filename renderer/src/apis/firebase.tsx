@@ -21,6 +21,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const database = getDatabase(app);
 
+// auth
 export const signInEmail = async (email: string, password: string) => {
   return createUserWithEmailAndPassword(auth, email, password).catch(
     (error) => {
@@ -78,6 +79,7 @@ export const writeUserData = async (
   });
 };
 
+// list
 export const getUserList = async () => {
   return get(ref(database, `users`)).then((snapshot) => {
     const items = snapshot.val() || {};
@@ -85,19 +87,7 @@ export const getUserList = async () => {
   });
 };
 
-// FIXME: uuid 말고 다른 방법 생각하기
-// export const makeChatRoom = async (
-//   id: string,
-//   userId: string,
-//   otherId: string
-// ) => {
-//   return set(ref(database, "chatRoom/" + userId), {
-//     chatRoom: id,
-//     me: userId,
-//     other: otherId,
-//   });
-// };
-
+// group
 export const getGroupList = async () => {
   return get(ref(database, `group`)).then((snapshot) => {
     if (snapshot.exists()) {
@@ -128,5 +118,38 @@ export const getGroupMsg = async (idx) => {
       return Object.values(items);
     }
     return [];
+  });
+};
+
+//1:1 chat
+export const makeChatRoom = async (myId, yourId) => {
+  const stamp = Date.now();
+
+  return get(ref(database, `chatRoom/${myId}/${yourId}`)).then((snapshot) => {
+    if (snapshot.exists()) {
+      return snapshot.val();
+    } else {
+      set(ref(database, `chatRoom/${myId}/${yourId}`), stamp);
+      return stamp;
+    }
+  });
+};
+
+export const getChatMsg = async (roomId) => {
+  return get(ref(database, `message/${roomId}`)).then((snapshot) => {
+    if (snapshot.exists()) {
+      const items = snapshot.val();
+      return Object.values(items);
+    }
+    return [];
+  });
+};
+
+export const setChatMsg = async (roomId, uid, name, message) => {
+  const stamp = Date.now();
+  return set(ref(database, `message/${roomId}/${stamp}`), {
+    uid,
+    name,
+    message,
   });
 };

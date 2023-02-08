@@ -21,7 +21,7 @@ export default function signIn() {
           user: { uid, email },
         } = res;
         writeUserData(uid, email, user.name);
-        router.push("/home");
+        router.push("/list");
         setUser({ email: "", name: "", password: "" });
       })
       .catch((error) => console.error(error));

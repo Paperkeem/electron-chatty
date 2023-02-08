@@ -17,43 +17,5 @@ export default function list() {
 
   const handleGoChatRoom = () => {};
 
-  return (
-    <SideBar>
-      <p>유저를 클릭하면 1:1 채팅방을 생성합니다.</p>
-      <p>이미 채팅방이 존재하는 경우 생성된 채팅방으로 이동합니다.</p>
-      <hr />
-      {userList?.map((user, index) => (
-        <section className="userBox" key={index}>
-          <div className="wrapper">
-            <Space wrap size={16}>
-              <Avatar shape="square" icon={<UserOutlined />} />
-            </Space>
-            <span className="name">{user.name}</span>
-            <span className="email">{user.email}</span>
-          </div>
-          <Button onClick={handleGoChatRoom}>1:1 채팅하기</Button>
-        </section>
-      ))}
-      <style jsx>{`
-        .userBox {
-          padding: 10px;
-          border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-          cursor: pointer;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        }
-        .userBox:hover {
-          background-color: rgba(0, 0, 0, 0.05);
-        }
-        .name {
-          padding-left: 10px;
-        }
-        .email {
-          margin-left: 10px;
-          color: lightgray;
-        }
-      `}</style>
-    </SideBar>
-  );
+  return <SideBar>1:1 채팅방 리스트</SideBar>;
 }

@@ -1,29 +1,28 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
-import SideBar from "../../src/components/Sidebar";
-import { SendOutlined } from "@ant-design/icons";
-import { getGroupMsg, setChatMsgInGroup } from "../../src/apis/firebase";
-import { useAuthContext } from "../../src/context/AuthContext";
-import ChatMsg from "../../src/components/chat/ChatMsg";
+import { getChatMsg, setChatMsg } from "../../src/apis/firebase";
 import ChatInput from "../../src/components/chat/ChatInput";
+import ChatMsg from "../../src/components/chat/ChatMsg";
+import SideBar from "../../src/components/Sidebar";
+import { useAuthContext } from "../../src/context/AuthContext";
 
-export default function GroupChat() {
+export default function chatRoom() {
   const {
-    query: { idx },
+    query: { roomId, yourName },
   } = useRouter();
   const { uid, name } = useAuthContext();
 
-  const [groupChat, setGroupChat] = useState<any>();
+  const [chat, setChat] = useState<any>();
   const [message, setMessage] = useState("");
 
   const chatWindowRef = useRef(null);
 
   useEffect(() => {
     chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
-  }, [groupChat]);
+  }, [chat]);
 
   useEffect(() => {
-    getGroupMsg(idx).then(setGroupChat);
+    getChatMsg(roomId).then(setChat);
   }, []);
 
   const handleChange = (e: any) => {
@@ -37,19 +36,23 @@ export default function GroupChat() {
       return;
     }
     setMessage(null);
-    await setChatMsgInGroup(idx, uid, name, message);
-    getGroupMsg(idx).then(setGroupChat);
+    await setChatMsg(roomId, uid, name, message);
+    getChatMsg(roomId).then(setChat);
   };
 
   return (
     <SideBar>
-      <p className="chatptag">그룹 채팅방 {idx}</p>
+      <p className="chatptag">{yourName}님과의 채팅방</p>
       <hr />
 
       <section className="chatForm" ref={chatWindowRef}>
         <div className="chatWindow">
-          {groupChat?.length === 0 && <p>지금 바로 채팅을 시작해보세요!</p>}
-          {groupChat?.map((chat, index) => {
+          {chat?.length === 0 && (
+            <p className="chatptag">
+              지금 바로 {yourName}님과 채팅을 시작해보세요!
+            </p>
+          )}
+          {chat?.map((chat, index) => {
             if (chat.name == name) {
               return (
                 <div key={index} className="mychat">
