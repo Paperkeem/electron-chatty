@@ -28,6 +28,11 @@ export const signInEmail = async (
 ) => {
   return createUserWithEmailAndPassword(auth, email, password)
     .then((res) => {
+      localStorage.setItem(
+        "userData",
+        JSON.stringify({ ...res.user, displayName: name })
+      );
+
       updateProfile(auth.currentUser, {
         displayName: name,
       });
