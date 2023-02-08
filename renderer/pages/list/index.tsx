@@ -16,7 +16,7 @@ export default function list() {
   }, []);
 
   const handleGoChatRoom = (yourId, yourName) => {
-    makeChatRoom(uid, yourId).then((roomId) => {
+    makeChatRoom(uid, name, yourId, yourName).then((roomId) => {
       router.push({
         pathname: `chat/${roomId}`,
         query: {
@@ -51,26 +51,6 @@ export default function list() {
           );
         }
       })}
-      <style jsx>{`
-        .userBox {
-          padding: 10px;
-          border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-          cursor: pointer;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        }
-        .userBox:hover {
-          background-color: rgba(0, 0, 0, 0.05);
-        }
-        .name {
-          padding-left: 10px;
-        }
-        .email {
-          margin-left: 10px;
-          color: lightgray;
-        }
-      `}</style>
     </SideBar>
   );
 }

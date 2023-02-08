@@ -142,6 +142,7 @@ a {
   text-decoration: none;
 }
 
+/* chat Section */
 .chatptag {
   text-align: center;
 }
@@ -193,4 +194,24 @@ a {
   border-radius: 20px;
   background-color: #192a56;
   color: white;
+}
+
+/* My chat List */
+.userBox {
+  padding: 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.userBox:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+.name {
+  padding-left: 10px;
+}
+.email {
+  margin-left: 10px;
+  color: lightgray;
 }

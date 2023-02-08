@@ -126,24 +126,26 @@ export const getMyChatList = async (myId) => {
   return get(ref(database, `chatRoom/${myId}`)).then((snapshot) => {
     if (snapshot.exists()) {
       const items = snapshot.val();
-      return Object.keys(items);
+      return Object.entries(items);
     }
     return [];
   });
 };
 
-export const makeChatRoom = async (myId, yourId) => {
+export const makeChatRoom = async (myId, myName, yourId, yourName) => {
   const stamp = Date.now();
 
-  return get(ref(database, `chatRoom/${myId}/${yourId}`)).then((snapshot) => {
-    if (snapshot.exists()) {
-      return snapshot.val();
-    } else {
-      set(ref(database, `chatRoom/${myId}/${yourId}`), stamp);
-      set(ref(database, `chatRoom/${yourId}/${myId}`), stamp);
-      return stamp;
+  return get(ref(database, `chatRoom/${myId}/${yourId}@${yourName}`)).then(
+    (snapshot) => {
+      if (snapshot.exists()) {
+        return snapshot.val();
+      } else {
+        set(ref(database, `chatRoom/${myId}/${yourId}@${yourName}`), stamp);
+        set(ref(database, `chatRoom/${yourId}/${myId}@${myName}`), stamp);
+        return stamp;
+      }
     }
-  });
+  );
 };
 
 export const getChatMsg = async (roomId) => {
