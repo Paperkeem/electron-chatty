@@ -15,7 +15,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     onAuth(setUser);
-    console.log("auth 함수 콜링 중");
   }, []);
 
   return (
