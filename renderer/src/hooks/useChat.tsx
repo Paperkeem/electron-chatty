@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import { getChatMsg, setChatMsg } from "../apis/firebase";
 
-interface IChat {
+export interface IChat {
   message: string;
   name: string;
   uid: string;
