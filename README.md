@@ -99,11 +99,13 @@ https://github.com/Paperkeem/nextron-chatty/blob/9e0d467763a7ea841c3608d2ed60f12
 
 #### 3. 채팅방 내 중복되는 로직은 custom hook으로 만들어 관리 
 
-https://github.com/Paperkeem/nextron-chatty/blob/9e0d467763a7ea841c3608d2ed60f12b9f39747c/renderer/pages/chat/%5BroomId%5D.tsx#L22-L27
 https://github.com/Paperkeem/nextron-chatty/blob/9e0d467763a7ea841c3608d2ed60f12b9f39747c/renderer/src/hooks/useMsg.tsx#L3-L20
 https://github.com/Paperkeem/nextron-chatty/blob/9e0d467763a7ea841c3608d2ed60f12b9f39747c/renderer/src/hooks/useScroll.tsx#L3-L11
 
 - 1:1 채팅방과 그룹 채팅방에서 동일하게 쓰이는 input event와 scroll 이벤트를 custom hook으로 관리
 
+https://github.com/Paperkeem/nextron-chatty/blob/9e0d467763a7ea841c3608d2ed60f12b9f39747c/renderer/pages/chat/%5BroomId%5D.tsx#L22-L27
+https://github.com/Paperkeem/nextron-chatty/blob/fd23871bb2dc4ba26643cadeae30fd0662361b5a/renderer/pages/group/%5Bidx%5D.tsx#L22-L27
 
+- useMutation 함수를 callback으로 넘기고 obj를 Value 값으로 넘겨 이용
 
