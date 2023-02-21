@@ -5,15 +5,24 @@ import SideBar from "../../src/components/Sidebar";
 import { Avatar, Space, Button } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { useRouter } from "next/router";
+import { useQuery } from "@tanstack/react-query";
+import LoadingSpinner from "../../src/components/ui/LoadingSpinner";
+
+interface IUserList {
+  email: string;
+  name: string;
+  userId: string;
+}
 
 export default function list() {
-  const [userList, setUserList] = useState([]);
   const { uid, name, email } = useAuthContext();
   const router = useRouter();
 
-  useEffect(() => {
-    getUserList().then(setUserList);
-  }, []);
+  const { isLoding, data: userList } = useQuery<IUserList[] | unknown[]>(
+    ["chatList"],
+    getUserList,
+    { staleTime: 1000 * 60 * 5 }
+  );
 
   const handleGoChatRoom = (yourId, yourName) => {
     makeChatRoom(uid, name, yourId, yourName).then((roomId) => {
@@ -32,6 +41,7 @@ export default function list() {
       <p>유저를 클릭하면 1:1 채팅방을 생성합니다.</p>
       <p>이미 채팅방이 존재하는 경우 생성된 채팅방으로 이동합니다.</p>
       <hr />
+      {isLoding && <LoadingSpinner />}
       {userList?.map((user, index) => {
         if (user.name === name || user.email === email) return;
         else {
