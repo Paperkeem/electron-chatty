@@ -5,6 +5,8 @@ import { useAuthContext } from "../../src/context/AuthContext";
 import ChatMsg from "../../src/components/chat/ChatMsg";
 import ChatInput from "../../src/components/chat/ChatInput";
 import useGroup from "../../src/hooks/useGroup";
+import useScroll from "../../src/hooks/useScroll";
+import useMsg from "../../src/hooks/useMsg";
 
 export default function GroupChat() {
   const {
@@ -17,27 +19,12 @@ export default function GroupChat() {
     sendGroupQuery,
   } = useGroup(idx as string);
 
-  const [message, setMessage] = useState("");
-
-  const chatWindowRef = useRef(null);
-
-  useEffect(() => {
-    chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
-  }, [groupChat]);
-
-  const handleChange = (e: any) => {
-    const { value } = e.target;
-    setMessage(value);
-  };
-
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    if (!message || message.trim() === "") {
-      return;
-    }
-    setMessage(null);
-    sendGroupQuery.mutate({ idx, uid, name, message });
-  };
+  const { chatWindowRef } = useScroll(groupChat);
+  const { message, handleChange, handleSubmit } = useMsg(sendGroupQuery, {
+    idx,
+    uid,
+    name,
+  });
 
   return (
     <SideBar>

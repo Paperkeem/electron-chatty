@@ -5,39 +5,26 @@ import ChatMsg from "../../src/components/chat/ChatMsg";
 import SideBar from "../../src/components/Sidebar";
 import { useAuthContext } from "../../src/context/AuthContext";
 import useChat from "../../src/hooks/useChat";
+import useScroll from "../../src/hooks/useScroll";
+import useMsg from "../../src/hooks/useMsg";
 
 export default function chatRoom() {
   const {
     query: { roomId, yourName },
   } = useRouter();
-
   const { uid, name } = useAuthContext();
-  const [message, setMessage] = useState("");
 
   const {
     chatQuery: { data: chat },
     sendMsgQuery,
   } = useChat(roomId as string);
 
-  const chatWindowRef = useRef(null);
-
-  useEffect(() => {
-    chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
-  }, [chat]);
-
-  const handleChange = (e: any) => {
-    const { value } = e.target;
-    setMessage(value);
-  };
-
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    if (!message || message.trim() === "") {
-      return;
-    }
-    setMessage(null);
-    sendMsgQuery.mutate({ roomId, uid, name, message });
-  };
+  const { chatWindowRef } = useScroll(chat);
+  const { message, handleChange, handleSubmit } = useMsg(sendMsgQuery, {
+    roomId,
+    uid,
+    name,
+  });
 
   return (
     <SideBar>
