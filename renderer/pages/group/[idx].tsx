@@ -1,11 +1,10 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import SideBar from "../../src/components/Sidebar";
-import { SendOutlined } from "@ant-design/icons";
-import { getGroupMsg, setChatMsgInGroup } from "../../src/apis/firebase";
 import { useAuthContext } from "../../src/context/AuthContext";
 import ChatMsg from "../../src/components/chat/ChatMsg";
 import ChatInput from "../../src/components/chat/ChatInput";
+import useGroup from "../../src/hooks/useGroup";
 
 export default function GroupChat() {
   const {
@@ -13,7 +12,11 @@ export default function GroupChat() {
   } = useRouter();
   const { uid, name } = useAuthContext();
 
-  const [groupChat, setGroupChat] = useState<any>();
+  const {
+    groupQuery: { data: groupChat },
+    sendGroupQuery,
+  } = useGroup(idx as string);
+
   const [message, setMessage] = useState("");
 
   const chatWindowRef = useRef(null);
@@ -21,10 +24,6 @@ export default function GroupChat() {
   useEffect(() => {
     chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
   }, [groupChat]);
-
-  useEffect(() => {
-    getGroupMsg(idx).then(setGroupChat);
-  }, []);
 
   const handleChange = (e: any) => {
     const { value } = e.target;
@@ -37,8 +36,7 @@ export default function GroupChat() {
       return;
     }
     setMessage(null);
-    await setChatMsgInGroup(idx, uid, name, message);
-    getGroupMsg(idx).then(setGroupChat);
+    sendGroupQuery.mutate({ idx, uid, name, message });
   };
 
   return (

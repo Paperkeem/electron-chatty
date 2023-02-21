@@ -4,18 +4,29 @@ import SideBar from "../../src/components/Sidebar";
 import { getGroupList, makeGroupChat } from "../../src/apis/firebase";
 import { Button } from "antd";
 import { UserOutlined } from "@ant-design/icons";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import LoadingSpinner from "../../src/components/ui/LoadingSpinner";
 
 export default function groupchat() {
-  const [groupList, setGroupList] = useState<string[]>();
+  const { isLoding, data: groupList } = useQuery(["groupList"], getGroupList, {
+    staleTime: 1000 * 60 * 5,
+  });
 
-  useEffect(() => {
-    getGroupList().then(setGroupList);
-  }, []);
+  const queryClicent = useQueryClient();
+  const makeGroup = useMutation(
+    ({ len }) => {
+      makeGroupChat(len);
+    },
+    {
+      onSuccess: () => {
+        queryClicent.invalidateQueries(["groupList"]);
+      },
+    }
+  );
 
   const handleMakeGroup = async () => {
     const len = Number(groupList.length + 1);
-    await makeGroupChat(len);
-    getGroupList().then(setGroupList);
+    makeGroup.mutate({ len });
   };
 
   return (
@@ -24,6 +35,7 @@ export default function groupchat() {
         새로운 그룹 채팅 생성하기
       </Button>
       <section>
+        {isLoding && <LoadingSpinner />}
         {groupList?.map((group, idx) => (
           <Link href={`/group/${idx + 1}`} key={idx}>
             <div className="group">
