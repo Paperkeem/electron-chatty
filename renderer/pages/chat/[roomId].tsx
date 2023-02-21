@@ -1,29 +1,29 @@
-import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
-import { getChatMsg, setChatMsg } from "../../src/apis/firebase";
+import { useRouter } from "next/router";
 import ChatInput from "../../src/components/chat/ChatInput";
 import ChatMsg from "../../src/components/chat/ChatMsg";
 import SideBar from "../../src/components/Sidebar";
 import { useAuthContext } from "../../src/context/AuthContext";
+import useChat from "../../src/hooks/useChat";
 
 export default function chatRoom() {
   const {
     query: { roomId, yourName },
   } = useRouter();
-  const { uid, name } = useAuthContext();
 
-  const [chat, setChat] = useState<any>();
+  const { uid, name } = useAuthContext();
   const [message, setMessage] = useState("");
+
+  const {
+    chatQuery: { data: chat },
+    sendMsgQuery,
+  } = useChat(roomId as string);
 
   const chatWindowRef = useRef(null);
 
   useEffect(() => {
     chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
   }, [chat]);
-
-  useEffect(() => {
-    getChatMsg(roomId).then(setChat);
-  }, []);
 
   const handleChange = (e: any) => {
     const { value } = e.target;
@@ -36,8 +36,7 @@ export default function chatRoom() {
       return;
     }
     setMessage(null);
-    await setChatMsg(roomId, uid, name, message);
-    getChatMsg(roomId).then(setChat);
+    sendMsgQuery.mutate({ roomId, uid, name, message });
   };
 
   return (
